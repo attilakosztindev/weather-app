@@ -51,7 +51,7 @@ export default {
       coords ? await this.fetchWeatherData(coords.latitude, coords.longitude) : void 0
     },
     async fetchWeatherData(lat, lon) {
-      if (!localStorage.getItem('weatherData')) {
+      if (!sessionStorage.getItem('weatherData')) {
         const {data} = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${ lat }&lon=${ lon }&appid=${ process.env.VUE_APP_API_KEY }`, {})
         if (data) {
           this.data.celsius = `${Math.round(data.main?.temp - 273.15)}° C`
@@ -63,10 +63,10 @@ export default {
           this.data.sunrise = this.formatDate(data.sys?.sunrise)
           this.data.sunset = this.formatDate(data.sys?.sunset)
           this.data.icon = data.weather[0]?.icon
-          localStorage.setItem('weatherData', JSON.stringify(this.data))
+          sessionStorage.setItem('weatherData', JSON.stringify(this.data))
         }
       } else {
-        this.data = JSON.parse(localStorage.getItem('weatherData'))
+        this.data = JSON.parse(sessionStorage.getItem('weatherData'))
       }
     },
     formatDate(unixDateCode) {
